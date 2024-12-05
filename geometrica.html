@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programación Geométrica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        :root {
+        --primary-color: #4a90e2;
+        --secondary-color: #5c6ac4;
+        --background-color: #f5f7fa;
+        --text-color: #2d3748;
+        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        }
+
+        /* Base styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #eaeaea;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #1f1f1f;
+            border-bottom: 2px solid #444;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #ffcc00;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 40px auto;
+            background-color: #1f1f1f;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .form-container h2 {
+            color: #ffcc00;
+            text-align: center;
+        }
+        .form-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .form-container input {
+            width: 96%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #2a2a2a;
+            color: #eaeaea;
+        }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4caf50;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+
+        /* Contenedor */
+        .container {
+        max-width: 600px;
+        margin: 50px auto;
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: var(--card-shadow);
+        text-align: center;
+        }
+
+        /* Título */
+        h1 {
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+        }
+
+        /* Botones */
+        button {
+        padding: 0.8rem 1.5rem;
+        margin: 1rem 1rem;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+        background-color: var(--secondary-color);
+        transform: scale(1.05);
+        }
+
+        /* Resultados */
+        #resultado {
+        margin-top: 2rem;
+        padding: 1rem;
+        border-radius: 5px;
+        background: #e9f7ef;
+        color: var(--text-color);
+        display: none;
+        }
+
+        /* Errores */
+        #error {
+        color: red;
+        margin-top: 1.5rem;
+        font-size: 1rem;
+        }
+
+        /* Hero section */
+        .hero {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        text-align: center;
+        padding: 4rem 2rem;
+        margin-bottom: 3rem;
+        position: relative;
+        }
+
+        .hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        }
+
+        .hero h2 {
+        font-size: 1.5rem;
+        font-weight: 400;
+        opacity: 0.9;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        footer button {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        footer button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.2rem;
+            }
+            
+            .nav-icon {
+                top: 1rem;
+                left: 1rem;
+            }
+            
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Programación Geométrica</h1>
+    </header>
+    
+    <div class="form-container">
+        <h1>Calculadora de Caja</h1>
+        <p>Seleccione una operación:</p>
+        <div class="options">
+            <button id="volumen-maximo-btn">Calcular Volumen Máximo</button>
+            <button id="area-minima-btn">Calcular Área Mínima</button>
+        </div>
+        <div id="inputs" style="display: none;">
+            <p id="input-label">Ingrese el valor:</p>
+            <input type="number" id="input-value" placeholder="Ingrese un valor" step="0.01" min="0">
+            <button id="calcular-btn">Calcular</button>
+        </div>
+        <div id="resultado"></div>
+    </div>
+    <script>
+        let currentOperation = null;
+
+        // Mostrar u ocultar el formulario de entrada
+        function mostrarFormulario(operacion) {
+        currentOperation = operacion;
+        const inputLabel = document.getElementById('input-label');
+        const inputsDiv = document.getElementById('inputs');
+        const resultadoDiv = document.getElementById('resultado');
+
+        resultadoDiv.style.display = 'none'; // Ocultar resultados previos
+        inputsDiv.style.display = 'block';
+
+        if (operacion === 'volumen') {
+            inputLabel.textContent = 'Ingrese el área fija de la caja (en m²):';
+        } else if (operacion === 'area') {
+            inputLabel.textContent = 'Ingrese el volumen deseado de la caja (en m³):';
+        }
+        }
+
+        // Calcular el volumen máximo
+        function calcularVolumenMaximo(area) {
+        const x1 = Math.sqrt(area / 3.0);
+        const x2 = x1;
+        const x3 = x1 / 2;
+        const volumenOptimo = x1 * x2 * x3;
+
+        return {
+            x1,
+            x2,
+            x3,
+            volumenOptimo,
+        };
+        }
+
+        // Calcular el área mínima
+        function calcularAreaMinima(volumen) {
+        const x1 = Math.pow(4, 1 / 6) * Math.pow(volumen, 1 / 3); // Largo y Ancho
+        const x2 = x1; // Largo y Ancho iguales
+        const x3 = x1 / 2; // Altura
+        const areaMinima = 3 * Math.pow(4, 1 / 3) * Math.pow(volumen, 2 / 3);
+
+        return {
+            x1,
+            x2,
+            x3,
+            areaMinima,
+        };
+        }
+
+        // Manejar el cálculo según la operación seleccionada
+        function manejarCalculo() {
+        const inputValue = parseFloat(document.getElementById('input-value').value);
+        const resultadoDiv = document.getElementById('resultado');
+
+        if (isNaN(inputValue) || inputValue <= 0) {
+            resultadoDiv.style.display = 'block';
+            resultadoDiv.innerHTML = `<p id="error">El valor debe ser un número positivo.</p>`;
+            return;
+        }
+
+        let resultadoHTML = '';
+
+        if (currentOperation === 'volumen') {
+            const { x1, x2, x3, volumenOptimo } = calcularVolumenMaximo(inputValue);
+            resultadoHTML = `
+                    <h3>Resultados: Volumen Máximo</h3>
+                    <p><strong>Largo (x1):</strong> ${x1.toFixed(2)} m</p>
+                    <p><strong>Ancho (x2):</strong> ${x2.toFixed(2)} m</p>
+                    <p><strong>Alto (x3):</strong> ${x3.toFixed(2)} m</p>
+                    <p><strong>Volumen Máximo:</strong> ${volumenOptimo.toFixed(
+                    2
+                    )} m³</p>
+                `;
+        } else if (currentOperation === 'area') {
+            const { x1, x2, x3, areaMinima } = calcularAreaMinima(inputValue);
+            resultadoHTML = `
+                    <h3>Resultados: Área Mínima</h3>
+                    <p><strong>Largo (x1):</strong> ${x1.toFixed(2)} m</p>
+                    <p><strong>Ancho (x2):</strong> ${x2.toFixed(2)} m</p>
+                    <p><strong>Alto (x3):</strong> ${x3.toFixed(2)} m</p>
+                    <p><strong>Área Mínima:</strong> ${areaMinima.toFixed(2)} m²</p>
+                `;
+        }
+
+        resultadoDiv.style.display = 'block';
+        resultadoDiv.innerHTML = resultadoHTML;
+        }
+
+        // Asociar eventos a los botones
+        document
+        .getElementById('volumen-maximo-btn')
+        .addEventListener('click', () => mostrarFormulario('volumen'));
+        document
+        .getElementById('area-minima-btn')
+        .addEventListener('click', () => mostrarFormulario('area'));
+        document
+        .getElementById('calcular-btn')
+        .addEventListener('click', manejarCalculo);
+    </script>
+
+<footer>
+    <button onclick="window.location.href='index.php';">Volver al Inicio</button>
+</footer>
+
+</body>
+</html>

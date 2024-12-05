@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimización Cuadrática</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #eaeaea;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #1f1f1f;
+            border-bottom: 2px solid #444;
+        }
+        header h1 {
+            margin: 0;
+            color: #ffcc00;
+        }
+        .form-container {
+            max-width: 700px;
+            margin: 40px auto;
+            background-color: #1f1f1f;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .form-container h2 {
+            color: #ffcc00;
+            text-align: center;
+        }
+        .form-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .form-container input {
+            width: 96%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #2a2a2a;
+            color: #eaeaea;
+        }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #4caf50;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+        }
+        .output p {
+            margin: 5px 0;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+        footer button {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        footer button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Programación Cuadrática</h1>
+</header>
+
+<div class="form-container">
+    <form id="optimization-form">
+        <h2>Función Objetivo</h2>
+        <label for="c1">Coeficiente de x1:</label>
+        <input type="number" id="c1" name="c1" required step="0.01" value="6">
+        <label for="c2">Coeficiente de x2:</label>
+        <input type="number" id="c2" name="c2" required step="0.01" value="3">
+        <label for="c1sq">Coeficiente de x1²:</label>
+        <input type="number" id="c1sq" name="c1sq" required step="0.01" value="2">
+        <label for="c2sq">Coeficiente de x2²:</label>
+        <input type="number" id="c2sq" name="c2sq" required step="0.01" value="3">
+
+        <h2>Restricciones</h2>
+        <label for="r1">x1 + x2 ≤</label>
+        <input type="number" id="r1" name="r1" required step="0.01" value="1">
+        <label for="r2">2x1 + 3x2 ≤</label>
+        <input type="number" id="r2" name="r2" required step="0.01" value="4">
+
+        <button type="submit">Resolver</button>
+    </form>
+    <div class="output" id="output">
+        <p>Ingresa los datos y presiona "Resolver" para calcular la solución.</p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('optimization-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const c1 = parseFloat(document.getElementById('c1').value);
+        const c2 = parseFloat(document.getElementById('c2').value);
+        const c1sq = parseFloat(document.getElementById('c1sq').value);
+        const c2sq = parseFloat(document.getElementById('c2sq').value);
+        const r1 = parseFloat(document.getElementById('r1').value);
+        const r2 = parseFloat(document.getElementById('r2').value);
+
+        function objetivo(x1, x2) {
+            return c1 * x1 + c2 * x2 - c1sq * Math.pow(x1, 2) - c2sq * Math.pow(x2, 2);
+        }
+
+        function cumpleRestricciones(x1, x2) {
+            return x1 + x2 <= r1 && 2 * x1 + 3 * x2 <= r2 && x1 >= 0 && x2 >= 0;
+        }
+
+        let mejorZ = -Infinity;
+        let mejorX1 = 0;
+        let mejorX2 = 0;
+
+        const pasos = 100;
+        for (let i = 0; i <= pasos; i++) {
+            for (let j = 0; j <= pasos; j++) {
+                let x1 = i / pasos;
+                let x2 = j / pasos;
+                if (cumpleRestricciones(x1, x2)) {
+                    let z = objetivo(x1, x2);
+                    if (z > mejorZ) {
+                        mejorZ = z;
+                        mejorX1 = x1;
+                        mejorX2 = x2;
+                    }
+                }
+            }
+        }
+
+        const outputDiv = document.getElementById('output');
+        outputDiv.innerHTML = `
+            <p><strong>Valor óptimo de Z:</strong> ${mejorZ.toFixed(4)}</p>
+            <p><strong>Solución óptima (x1, x2):</strong> (${mejorX1.toFixed(4)}, ${mejorX2.toFixed(4)})</p>
+        `;
+    });
+</script>
+
+<footer>
+    <button onclick="window.location.href='index.php';">Volver al Inicio</button>
+</footer>
+
+</body>
+</html>

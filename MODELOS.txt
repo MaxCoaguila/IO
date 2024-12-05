@@ -1,0 +1,17 @@
+MODELO DE LÍNEA DE ESPERA CON UN SERVIDOR Y LLEGADAS POISSON Y TIEMPOS DE SERVICIO EXPONENCIALES
+→ Modelo M/M/1
+
+Esquema de Nacimiento y Muerte - Modelo M/M/1 con Capacidad Máxima
+→ TLP
+
+MODELO DE LÍNEA DE ESPERA CON UN SERVIDOR CON LLEGADAS POISSON Y TIEMPOS DE SERVICIO ARBITRARIOS
+→ Modelo M/G/1
+
+Modelo de múltiples canales con llegadas Poisson, tiempos de servicio arbitrarios y sin línea de espera
+→ Modelo M/G/c/0
+
+MODELO DE LÍNEA DE ESPERA DE MÚLTIPLES SERVIDORES
+→ Modelo M/M/c
+
+Modelos de línea de espera con fuentes finitas
+→ Modelo M/M/c/N
